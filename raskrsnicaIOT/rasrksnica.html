@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Raskrsnica</title>
+  <link rel="stylesheet" href="raskrsnica.css">
+</head>
+
+<body>
+  <h1>Raskrsnica</h1>
+  <div class="control-box">
+    <button id="btnGreen">Zeleno semafori 1 i 2</button>
+    <button id="btnRed">Zeleno semafor 3</button>
+    <button id="btnZuto">Zuta svjetla</button>
+    <button id="btnAuto">Automatski rezim</button>
+  </div>
+  <div id="randomNumberDisplay"></div>
+  <script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
+import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-analytics.js";
+import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDrkqs3nY3By5bgTSD7BJnGmi2j2gZ3PYs",
+  authDomain: "raskrsnica-7aceb.firebaseapp.com",
+  databaseURL: "https://raskrsnica-7aceb-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "raskrsnica-7aceb",
+  storageBucket: "raskrsnica-7aceb.appspot.com",
+  messagingSenderId: "925159531735",
+  appId: "1:925159531735:web:bff4d8adddad38b92d7c92",
+  measurementId: "G-8YTPMYB2XQ"
+};
+
+
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+
+// Referenca na Firebase bazu podataka
+var semaforRef = ref(getDatabase(app), "semafor");
+
+
+document.addEventListener("DOMContentLoaded", function () {
+  document.getElementById("btnGreen").addEventListener("click", function () {
+    
+    set(semaforRef, { semafor1: 1, semafor2: 1, semafor3: 0 });
+  });
+
+  document.getElementById("btnRed").addEventListener("click", function () {
+    
+    set(semaforRef, { semafor1: 0, semafor2: 0, semafor3: 1 });
+  });
+
+  document.getElementById("btnAuto").addEventListener("click", function () {
+    
+     set(semaforRef, { semafor1: 1, semafor2: 1, semafor3: 1 });
+  });
+  document.getElementById("btnZuto").addEventListener("click", function () {
+    
+     set(semaforRef, { semafor1: 0, semafor2: 0, semafor3: 0 });
+  });
+  
+});
+
+
+onValue(semaforRef, function (snapshot) {
+  var semaforState = snapshot.val();
+  console.log("Stanje semafora:", semaforState);
+
+
+});
+
+  </script>
+</body>
+
+</html>
